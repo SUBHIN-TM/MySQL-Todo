@@ -26,7 +26,7 @@ const addTask=async(req,res)=>{
        })
 
        console.log(newTask);
-       res.status(201).json(newTask);
+       res.status(201).json({message:'Task added successfully'});
          
     } catch (error) {
         console.error(error);
