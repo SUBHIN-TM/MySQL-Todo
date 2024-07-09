@@ -1,0 +1,45 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+.main{
+    display: flex;
+}
+
+.main > div{
+    width: 100px;
+}
+
+/* Smallest breakpoint */
+@media only screen and (max-width: 600px) {
+    .main {
+      display: flex;
+      flex-direction: column;
+      background-color: aqua;
+    }
+  }
+  
+  /* Next breakpoint */
+  @media only screen and (min-width: 601px) and (max-width: 768px) {
+    .main {
+      display: flex;
+      background-color: orange;
+    }
+  }
+  
+  /* Following breakpoint */
+  @media only screen and (min-width: 769px) and (max-width: 992px) {
+    .main {
+      display: block;
+      background-color: violet;
+    }
+  }
+  
+  /* Largest breakpoint */
+  @media only screen and (min-width: 993px) {
+    .main {
+      display: flex;
+      background-color: gold;
+    }
+  }
