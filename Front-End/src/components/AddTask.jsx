@@ -5,18 +5,18 @@ import { URL } from '../constants/link'
 import { ClipLoader } from 'react-spinners';
 const AddTask = ({modalOff,acknowledgement,editModal,editTaskData }) => {
 
-const[isWaiting,setIsWaiting]=useState(false)
-const [isEditModal,setIsEditModal]=useState(false)
-const [pvsImage,setPvsImage]=useState("")
+const[isWaiting,setIsWaiting]=useState(false) //WAITING WILL BE TRUE WHEN THE CRUD OPERATIONS LOADING..
+const [isEditModal,setIsEditModal]=useState(false) //STATE FOR MODAL ENSURING CURRENT MODAL IS USING FOR EDIT PURPOSE
+const [pvsImage,setPvsImage]=useState("") //TO DISPLAY  ALREADY UPLOADED  IMAGE IN FORM SECTION
 
-    const [input, setInput] = useState({
+    const [input, setInput] = useState({ //STATE FOR GETTING ALL INPUT FIELD VALUES
         heading: '',
         description: "",
         priority: 'high',
         image: null
     })
 
-    const [inputError,setInputError]=useState({
+    const [inputError,setInputError]=useState({ //STATE TO DISPLAY ERROS FOR CORRESPONDING INPUT FIELDS
         headingError:"",
         descriptionError:"",
         imageError:""
@@ -24,7 +24,7 @@ const [pvsImage,setPvsImage]=useState("")
 
 
     useEffect(() => {
-        if (editModal && editTaskData) {
+        if (editModal && editTaskData) { //IF THE STATE HAS VALUES ,THE INPUT FILED GET FILLED WITH EDIT DETAILS
           setInput({
             heading: editTaskData.heading,
             description: editTaskData.description,
@@ -42,7 +42,7 @@ const [pvsImage,setPvsImage]=useState("")
 
 
 
-    const inputOnChange = (e) => {
+    const inputOnChange = (e) => {  //GETTING INPUT VALUES
         const { name, value, files } = e.target;
         if (name == 'image') {
             setInput((pvs) => ({
@@ -59,7 +59,7 @@ const [pvsImage,setPvsImage]=useState("")
 
 
 
-    const validation=()=>{
+    const validation=()=>{ //VALIDATION FUNCTION TO CHECK THE INPUT FIELDS PROPERLY
         const heading= input.heading.trim()
         const description=input.description.trim()
  
@@ -106,7 +106,7 @@ const [pvsImage,setPvsImage]=useState("")
        }
 
 
-        if(count==0){
+        if(count==0){ //FORM SUBMITS ONLY AFTER VALIDATIONS SEND TRUE
             return true
          }else{
             return false
@@ -117,12 +117,12 @@ const [pvsImage,setPvsImage]=useState("")
 
     const addTask = async (e) => {
         e.preventDefault()
-        const result=validation()
+        const result=validation() //AFTER GETTING TRUE FROM VALIDATION, IT PROCEED THE CREATE TASK OPERATION
         if (!result){
             return
         }
 
-        const formData = new FormData();
+        const formData = new FormData();  //CHANGED TO FORM DATA
         formData.append('heading', input.heading);
         formData.append('description', input.description);
         formData.append('priority', input.priority);
@@ -157,7 +157,8 @@ const [pvsImage,setPvsImage]=useState("")
         }
     }
 
-const clear=()=>{
+
+const clear=()=>{ //MODAL CLOSE AND CLEAR THE INPUT FIELDS 
     modalOff()
     setInput({
         heading: '',

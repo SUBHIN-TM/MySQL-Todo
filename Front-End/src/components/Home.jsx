@@ -11,20 +11,20 @@ import { ClipLoader } from 'react-spinners';
 
 
 const Home = () => {
-  const [addModal, setAddModal] = useState(false)
-  const [editModal, setEditModal] = useState(false);
-  const [editTaskData, setEditTaskData] = useState({});
-  const [allTasks, setAllTasks] = useState([])
-  const [allTasksPrimary, setAllTasksPrimary] = useState([])
-  const [updatedCount, setUpdatedCount] = useState(1)
-  const [isLoading, setIsLoading] = useState(false)
-  const [filter, setFilter] = useState("All")
+  const [addModal, setAddModal] = useState(false) //CREATE POST MODAL OPEN TRIGGERING STATE
+  const [editModal, setEditModal] = useState(false); //CREATE POST MODAL ALSO USED IN EDIT POST BY CHANGING THE STATE
+  const [editTaskData, setEditTaskData] = useState({}); //STATE TO SAVE EDTING NEEDED TASKS DATA
+  const [allTasks, setAllTasks] = useState([]) //STATE  TO STORE ALL TASKS FROM DATABASE
+  const [allTasksPrimary, setAllTasksPrimary] = useState([]) //STATE TO STORE DATABASE TASKS AND ALSO FILTERING BASED ON THIS STATE
+  const [updatedCount, setUpdatedCount] = useState(1) //ITS USED FOR TRIGGER THE RENDERING, WHENEVER CRUD OPERATIONS PERFORM THE VALUE CHANGES AND RENDER IT
+  const [isLoading, setIsLoading] = useState(false)  //WAITING STATE IS USED FOR DELETE OPERATION, IS SHOWS SPINNER WHILE LOADING DELETE OPERATION
+  const [filter, setFilter] = useState("All") //INITIALLLY IT FILTERS ALL TASKS FROM THE DATABASE AND LATER IT FILTERS
 
   useEffect(() => {
     getAllTasks()
-  }, [updatedCount])
+  }, [updatedCount]) //WHENEVER CRUD OPERATIONS RUN IT WILL UPDATE THE COUNT AND UPDATE THE STATE
 
-  const getAllTasks = async () => {
+  const getAllTasks = async () => { //GETING ALL TASK FROM THE DATABASE
     try {
       const response = await axios.get(`${URL}`)
       setAllTasks(response.data.allTasks)
@@ -36,14 +36,12 @@ const Home = () => {
   }
 
 
-
-
-  useEffect(() => {
+  useEffect(() => { 
     filterFunction()
   }, [filter])
 
 
-  const filterFunction = () => {
+  const filterFunction = () => { //FILTERS THE DATA WITH THE FILTER STATE HOLDS THE NAME FOR  VALUES
     if (filter == 'all') {
       setAllTasks(allTasksPrimary)
     } else {
@@ -53,21 +51,20 @@ const Home = () => {
   }
 
 
-  const filterChange = (value) => {
+  const filterChange = (value) => { //FILTER FUNCTION GETS THE ARGUMENT AS VALUE FOR FILTERATION
     setFilter(value)
   }
 
 
-  const toggleModal = () => {
+  const toggleModal = () => { //MODAL ON OFF FUNCTION
     setAddModal(prevState => !prevState);
     setEditModal(false);
     setEditTaskData({});
   }
 
 
-  const acknowledgement = (status, message) => {
+  const acknowledgement = (status, message) => { //WHENEVER RESPONSE GET AFTER CRUD OPERAIONS ALERT PROPERLY GIVEN BY THIS FUNCTION
     console.log("Acknowledged with status:", status, "and message:", message);
-
     setUpdatedCount(updatedCount + 1)
     if (status == 'success') {
       toast.success(message)
@@ -76,7 +73,8 @@ const Home = () => {
     }
   }
 
-  const deleteTask = async (id) => {
+
+  const deleteTask = async (id) => { //DELETE OPERATION REQUIRES A CONFIRMATION
     confirmAlert({
       title: 'Confirm Delete',
       message: 'Are you sure you want to delete the Task?',
@@ -96,7 +94,7 @@ const Home = () => {
       ]
     });
 
-    const deleteProceed = async () => {
+    const deleteProceed = async () => { //AFTER DELETE CONFIRMATION IT PERFORM DELETE OPERATION
       setIsLoading(true)
       try {
         const response = await axios.delete(`${URL}deleteTask/${id}`);
@@ -112,9 +110,7 @@ const Home = () => {
   };
 
 
-
-
-  const editTask = (task) => {
+  const editTask = (task) => { //EDIT BUTTON CLICKED MODAL CHANGED TO EDIT MODAL ,AND EDITTASKDATA HOLDS THE EDITING DATA DETAILS
     setAddModal(true);
     setEditModal(true);
     setEditTaskData(task);
@@ -125,7 +121,7 @@ const Home = () => {
 
   return (
     <>
-      <Navbar filterChange={filterChange} />
+      <Navbar filterChange={filterChange} /> 
       <div className='p-2'>
         <button onClick={toggleModal} className='border p-1 bg-black text-white px-2 hover:bg-green-500 '> Create Post</button>
       </div>

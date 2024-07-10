@@ -1,7 +1,7 @@
-const Navbar = ({filterChange}) => {
+const Navbar = ({filterChange}) => {//FILTER CHANGE IS A FUNCION TO CHANGE THE FILTER PRIORITY
 
 const handleFilterChange = (event) => {
-    filterChange(event.target.value); // Call filterChange with the selected option value
+    filterChange(event.target.value); // CALLING FILTER CHANGE WITH SELECTED VALUE, IT USES LIFT STATE UP METHOD
   };
 
 
