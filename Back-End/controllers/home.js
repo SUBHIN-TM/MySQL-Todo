@@ -7,7 +7,7 @@ export const home= async(req,res)=>{
             order: [['createdAt', 'DESC']]
         });
         const filteredTasks=allTasks.map((data)=> data.dataValues)
-        console.log(filteredTasks);
+        // console.log(filteredTasks);
         return res.status(200).json({allTasks:filteredTasks})
     } catch (error) {
         console.error(error);

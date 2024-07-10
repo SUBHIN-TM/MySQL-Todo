@@ -1,10 +1,12 @@
+/* eslint-disable react/prop-types */
 import { useEffect, useState } from 'react'
 import axios from 'axios'
 import { URL } from '../constants/link'
 
 const AddTask = ({modalOff,acknowledgement,editModal,editTaskData }) => {
 
-
+const [isEditModal,setIsEditModal]=useState(false)
+const [pvsImage,setPvsImage]=useState("")
 
     const [input, setInput] = useState({
         heading: '',
@@ -26,8 +28,11 @@ const AddTask = ({modalOff,acknowledgement,editModal,editTaskData }) => {
             heading: editTaskData.heading,
             description: editTaskData.description,
             priority: editTaskData.priority,
-            image: null,
+            image: null, 
           });
+
+          setPvsImage(editTaskData.image)
+          setIsEditModal(true)
         }
       }, [editModal, editTaskData]);
     
@@ -84,6 +89,7 @@ const AddTask = ({modalOff,acknowledgement,editModal,editTaskData }) => {
              })) 
         }
 
+       if(!isEditModal){
         if(!input.image){
             count ++
             setInputError((pvs)=> ({
@@ -96,6 +102,7 @@ const AddTask = ({modalOff,acknowledgement,editModal,editTaskData }) => {
                 imageError:''
              })) 
         }
+       }
 
 
         if(count==0){
@@ -121,9 +128,17 @@ const AddTask = ({modalOff,acknowledgement,editModal,editTaskData }) => {
         formData.append('image', input.image)
 
         try {
-            const response = await axios.post(`${URL}addTask`, formData, {
-                headers: { 'Content-Type': 'multipart/form-data' }
-            })
+            let response;
+            if(isEditModal){
+                response = await axios.put(`${URL}editTask/${editTaskData.id}`, formData, {
+                    headers: { 'Content-Type': 'multipart/form-data' }
+                })
+            }else{
+                response = await axios.post(`${URL}addTask`, formData, {
+                    headers: { 'Content-Type': 'multipart/form-data' }
+                })
+            }
+
             console.log(response);
             acknowledgement('success',response.data.message)
             setTimeout(() => {
@@ -151,7 +166,7 @@ const clear=()=>{
         <div className="fixed inset-0 flex items-center justify-center z-50">
                     <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
                     <div className="bg-white rounded-lg overflow-hidden shadow-xl transform transition-all max-w-lg w-full p-6 relative z-10">
-                        <h2 className="text-2xl font-bold mb-4">Create Task</h2>
+                     <h2 className="text-2xl font-bold mb-4"> {isEditModal ? ("Edit Task"): ("Create Task")} </h2>
                         <form onSubmit={addTask} className="space-y-4 px-3">
                             <div className=''>
                                 <label htmlFor="heading" className="block text-sm font-medium text-gray-700">
@@ -201,6 +216,8 @@ const clear=()=>{
                                 <label htmlFor="image" className="block text-sm font-medium text-gray-700">
                                     Image
                                 </label>
+                                {isEditModal && ( <img width={'200px'} src={pvsImage} alt="" />)}
+                               
                                 <input
                                     type="file"
                                     name="image"

@@ -5,6 +5,9 @@ import axios from 'axios'
 import { URL } from '../constants/link'
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { confirmAlert } from 'react-confirm-alert'; 
+import 'react-confirm-alert/src/react-confirm-alert.css'; 
+
 
 const Home = () => {
   const [addModal, setAddModal] = useState(false)
@@ -48,14 +51,39 @@ const Home = () => {
   }
 
   const deleteTask = async (id) => {
+    confirmAlert({
+      title: 'Confirm Delete',
+      message: 'Are you sure you want to delete the Task?',
+      buttons: [
+          {
+              label: 'Yes',
+              onClick: () => {  //IF CONFIRMED DELETION IT WIL PROCEED
+                deleteProceed()
+              }
+          },
+          {
+              label: 'No',
+              onClick: () => {
+                  return
+              }
+          }
+      ]
+  });
+   
+  const deleteProceed=async()=>{
     try {
-      await axios.delete(`${URL}/${id}`);
-      toast.success("Task deleted successfully!");
+      const response= await axios.delete(`${URL}deleteTask/${id}`);
+      acknowledgement("success",response.data.message)
       setUpdatedCount(updatedCount + 1);
     } catch (error) {
-      toast.error("Failed to delete task.");
+      console.error(error);
+      acknowledgement("error",error.response.data.message)
     }
+  }
   };
+
+
+
 
   const editTask = (task) => {
     setAddModal(true);
@@ -77,11 +105,11 @@ const Home = () => {
     <>
       <Navbar />
       <div className='p-2'>
-        <button onClick={toggleModal} className='border p-1'> Create Post</button>
+        <button onClick={toggleModal} className='border p-1 bg-black text-white px-2 hover:bg-green-500 '> Create Post</button>
       </div>
 
       <div className="max-w-4xl mx-auto mt-8">
-        <h2 className="text-2xl font-bold mb-4">Tasks</h2>
+        <h2 className="text-2xl font-bold mb-6">Tasks</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {allTasks?.map((task) => (
             <div key={task.id} className="bg-white p-4 rounded-lg shadow-md">
