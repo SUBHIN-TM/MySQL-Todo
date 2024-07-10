@@ -4,7 +4,7 @@ import Task from "../models/task.js"
     console.log("Home Page");
     try {    
         const allTasks=await Task.findAll({
-            order: [['createdAt', 'DESC']]
+            order: [['createdAt', 'ASC']] //MENTIONED IN MACHINE TEST ,POST SHOULD BE IN ASCENDING ORDER
         });
         const filteredTasks=allTasks.map((data)=> data.dataValues)
         console.log(filteredTasks);
