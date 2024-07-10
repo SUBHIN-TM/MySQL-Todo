@@ -8,7 +8,8 @@ import "react-toastify/dist/ReactToastify.css";
 
 const Home = () => {
   const [addModal, setAddModal] = useState(false)
-  const [modalName, setModalName] = useState("")
+  const [editModal, setEditModal] = useState(false);
+  const [editTaskData, setEditTaskData] = useState({});
   const [allTasks, setAllTasks] = useState("")
   const [updatedCount, setUpdatedCount] = useState(1)
 
@@ -28,18 +29,10 @@ const Home = () => {
 
 
 
-  const createPost = () => {
-    if (addModal) {
-      setAddModal(false)
-      setModalName("")
-    } else {
-      setAddModal(true)
-      setModalName("Create")
-    }
-  }
-
-  const modalOff = () => {
-    setAddModal(false)
+  const toggleModal = () => {
+    setAddModal(prevState => !prevState);
+    setEditModal(false);
+    setEditTaskData({});
   }
 
 
@@ -54,6 +47,24 @@ const Home = () => {
     }
   }
 
+  const deleteTask = async (id) => {
+    try {
+      await axios.delete(`${URL}/${id}`);
+      toast.success("Task deleted successfully!");
+      setUpdatedCount(updatedCount + 1);
+    } catch (error) {
+      toast.error("Failed to delete task.");
+    }
+  };
+
+  const editTask = (task) => {
+    setAddModal(true);
+    setEditModal(true);
+    setEditTaskData(task);
+  };
+
+
+
 
   if (!allTasks) {
     return
@@ -66,7 +77,7 @@ const Home = () => {
     <>
       <Navbar />
       <div className='p-2'>
-        <button onClick={createPost} className='border p-1'> Create Post</button>
+        <button onClick={toggleModal} className='border p-1'> Create Post</button>
       </div>
 
       <div className="max-w-4xl mx-auto mt-8">
@@ -88,7 +99,23 @@ const Home = () => {
               <p className="text-sm text-gray-500">
                 Time: {new Date(task.createdAt).toLocaleTimeString()}
               </p>
+              <div className="flex justify-end space-x-2 mt-4">
+                <button
+                  onClick={() => editTask(task)}
+                  className="px-4 py-2 bg-blue-500 text-white rounded-md"
+                >
+                  Edit
+                </button>
+                <button
+                  onClick={() => deleteTask(task.id)}
+                  className="px-4 py-2 bg-red-500 text-white rounded-md"
+                >
+                  Delete
+                </button>
+              </div>
+
             </div>
+           
           ))}
         </div>
         <ToastContainer />
@@ -96,7 +123,7 @@ const Home = () => {
 
 
       {addModal && (
-        <AddTask modalOff={modalOff} acknowledgement={acknowledgement} />
+        <AddTask modalOff={toggleModal} acknowledgement={acknowledgement}  editModal={editModal}  editTaskData={editTaskData}  />
       )}
 
     </>

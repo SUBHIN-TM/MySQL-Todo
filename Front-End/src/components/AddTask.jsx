@@ -1,8 +1,11 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import axios from 'axios'
 import { URL } from '../constants/link'
 
-const AddTask = ({modalOff,acknowledgement}) => {
+const AddTask = ({modalOff,acknowledgement,editModal,editTaskData }) => {
+
+
+
     const [input, setInput] = useState({
         heading: '',
         description: "",
@@ -15,6 +18,23 @@ const AddTask = ({modalOff,acknowledgement}) => {
         descriptionError:"",
         imageError:""
     })
+
+
+    useEffect(() => {
+        if (editModal && editTaskData) {
+          setInput({
+            heading: editTaskData.heading,
+            description: editTaskData.description,
+            priority: editTaskData.priority,
+            image: null,
+          });
+        }
+      }, [editModal, editTaskData]);
+    
+
+
+
+
 
     const inputOnChange = (e) => {
         const { name, value, files } = e.target;
