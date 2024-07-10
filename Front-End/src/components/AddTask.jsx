@@ -1,10 +1,8 @@
 import { useState } from 'react'
 import axios from 'axios'
 import { URL } from '../constants/link'
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 
-const AddTask = ({ modalName ,modalOff}) => {
+const AddTask = ({modalOff,acknowledgement}) => {
     const [input, setInput] = useState({
         heading: '',
         description: "",
@@ -107,15 +105,20 @@ const AddTask = ({ modalName ,modalOff}) => {
                 headers: { 'Content-Type': 'multipart/form-data' }
             })
             console.log(response);
-            toast.success(response.data.message)
+            acknowledgement('success',response.data.message)
+            setTimeout(() => {
+                clear();
+            }, 1000);
+           
         } catch (error) {
             console.error(error);
-            toast.error(error.response.data.message)
+            acknowledgement('error',error.response.data.message)
+
         }
     }
 
 const clear=()=>{
-    modalOff(false)
+    modalOff()
     setInput({
         heading: '',
         description: '',
@@ -205,7 +208,7 @@ const clear=()=>{
                             </div>
                         </form>
                     </div>
-                    <ToastContainer />
+                    {/* <ToastContainer /> */}
                 </div>
     )
 }
