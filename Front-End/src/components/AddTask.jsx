@@ -141,7 +141,7 @@ const [pvsImage,setPvsImage]=useState("") //TO DISPLAY  ALREADY UPLOADED  IMAGE 
                 })
             }
 
-            console.log(response);
+            // console.log(response);
             acknowledgement('success',response.data.message)
             setTimeout(() => {
                 clear();

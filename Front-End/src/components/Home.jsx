@@ -64,7 +64,6 @@ const Home = () => {
 
 
   const acknowledgement = (status, message) => { //WHENEVER RESPONSE GET AFTER CRUD OPERAIONS ALERT PROPERLY GIVEN BY THIS FUNCTION
-    console.log("Acknowledged with status:", status, "and message:", message);
     setUpdatedCount(updatedCount + 1)
     if (status == 'success') {
       toast.success(message)
