@@ -3,11 +3,14 @@ import cloudinary from "../configuration/cloudinary.js";
 
  const deleteTask=async(req,res)=>{  //DELETING THE BLOG POST 
     try {
-        console.log("Delete post");
-        // console.log(req.params.id);
+        console.log("Delete post Section");
+        console.log("Delete the task id :",req.params.id);
         const taskId=req.params.id
         
         const task = await Task.findByPk(taskId)
+        if(!task){
+            return res.status(404).json({ message: "Task not found" });
+        }
         const imageId=task.dataValues.imageId
         if (imageId) {
             const cloudinaryResponse = await cloudinary.uploader.destroy(imageId);

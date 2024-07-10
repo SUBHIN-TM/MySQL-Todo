@@ -2,9 +2,10 @@
 import { useEffect, useState } from 'react'
 import axios from 'axios'
 import { URL } from '../constants/link'
-
+import { ClipLoader } from 'react-spinners';
 const AddTask = ({modalOff,acknowledgement,editModal,editTaskData }) => {
 
+const[isWaiting,setIsWaiting]=useState(false)
 const [isEditModal,setIsEditModal]=useState(false)
 const [pvsImage,setPvsImage]=useState("")
 
@@ -128,6 +129,7 @@ const [pvsImage,setPvsImage]=useState("")
         formData.append('image', input.image)
 
         try {
+            setIsWaiting(true)
             let response;
             if(isEditModal){
                 response = await axios.put(`${URL}editTask/${editTaskData.id}`, formData, {
@@ -149,6 +151,9 @@ const [pvsImage,setPvsImage]=useState("")
             console.error(error);
             acknowledgement('error',error.response.data.message)
 
+        }
+        finally{
+            setIsWaiting(false)
         }
     }
 
@@ -216,7 +221,7 @@ const clear=()=>{
                                 <label htmlFor="image" className="block text-sm font-medium text-gray-700">
                                     Image
                                 </label>
-                                {isEditModal && ( <img width={'200px'} src={pvsImage} alt="" />)}
+                                {isEditModal && ( <img  style={{ width: '100px', height: '100px', objectFit: 'contain' }}  src={pvsImage}  />)}
                                
                                 <input
                                     type="file"
@@ -228,7 +233,8 @@ const clear=()=>{
                                 />
                                 <small className='text-red-500 pl-1'>{inputError.imageError}</small>
                             </div>
-                            <div className="flex justify-end">
+                            {isWaiting? ( <div className='flex items-center'> <ClipLoader color="#000000" size={15} /><span className='ml-3'>Processing</span> </div>):(
+                                <div className="flex justify-end">
                                 <button
                                     type="button"
                                     onClick={() => clear()}
@@ -236,16 +242,13 @@ const clear=()=>{
                                 >
                                     Cancel
                                 </button>
-                                <button
-                                    type="submit"
-                                    className="inline-block bg-blue-500 text-white px-4 py-2 rounded-md"
-                                >
-                                    Submit
-                                </button>
+                                <button type="submit" className="inline-block bg-blue-500 text-white px-4 py-2 rounded-md"> Submit </button>
                             </div>
+                            )}
+                           
+                            
                         </form>
                     </div>
-                    {/* <ToastContainer /> */}
                 </div>
     )
 }

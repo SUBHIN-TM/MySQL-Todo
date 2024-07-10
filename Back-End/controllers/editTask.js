@@ -5,17 +5,19 @@ import Task from "../models/task.js";
 const editTask = async (req, res) => {
     try {
         console.log("Edit Task Section");
-        console.log("body", req.body);
-        console.log("image", req.file?.path);
-        console.log("param", req.params.id);
+        console.log("field to be edited", req.body);
+        console.log("task id which need to be edited is", req.params.id);
         const editId = req.params.id
         const path = req.file?.path
         const { heading, description, priority } = req.body
-
         let updateData = {
             heading,
             description,
             priority
+        }
+
+        if(!heading || !description || !priority){
+            return res.status(400).json({ message: "heading, description, priority, All Field should be required" })
         }
 
        
