@@ -3,11 +3,12 @@ const router = express.Router();
 import multer from 'multer';
 const uploads = multer({ dest: './tmp/' });
 
-import { home } from '../controllers/home.js';
+import home  from '../controllers/home.js';
 import addTask from '../controllers/addTask.js';
 import editTask from '../controllers/editTask.js';
 import deleteTask from '../controllers/deleteTask.js';
 
+//ALL ROUTES FOR CRUD
 router.get('/',home);
 router.post('/addTask',uploads.single('image'),addTask)
 router.put('/editTask/:id',uploads.single('image'),editTask)

@@ -6,13 +6,13 @@ const addTask=async(req,res)=>{
     try {
         console.log("Add Task Section");
         console.log("body", req.body);
-        console.log("image", req.file?.path);
+        console.log("image path", req.file?.path);
         const {path}= req.file
         const {heading,description,priority}=req.body
         const cloudinaryResult = await cloudinary.uploader.upload(path, { folder: 'Interval Todo' });
         if(cloudinaryResult){
             console.log("image saved in cloudinary",cloudinaryResult);
-            fs.unlinkSync(path);     
+            fs.unlinkSync(path); //AFTER SAVING THE IMAGE TEMP FOLDER IMAGE BACKUPS GETS DELETED
         }else{
             return res.status(400).json({ message: "cannot upload image, Please try again later" })   
         }
@@ -21,8 +21,8 @@ const addTask=async(req,res)=>{
         heading,
         description,
         priority,
-        image:cloudinaryResult.secure_url,
-        imageId:cloudinaryResult.public_id
+        image:cloudinaryResult.secure_url,  //IMAGE URL FROM CLOUDINARY
+        imageId:cloudinaryResult.public_id  //SAVING PUBLIC ID TO DELETE THE IMAGE FROM CLOUDINARY WHILE DOING DELETE OPERATION
        })
 
        console.log(newTask);

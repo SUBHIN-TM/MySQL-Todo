@@ -1,6 +1,6 @@
 import Task from "../models/task.js"
 
-export const home= async(req,res)=>{
+ const home= async(req,res)=>{
     console.log("Home Page");
     try {    
         const allTasks=await Task.findAll({
@@ -17,3 +17,5 @@ export const home= async(req,res)=>{
    
 }
 
+
+export default home

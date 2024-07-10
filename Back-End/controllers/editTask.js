@@ -27,7 +27,7 @@ const editTask = async (req, res) => {
                 console.log("image saved in cloudinary", cloudinaryResult);
                 fs.unlinkSync(path);
                 updateData.image = cloudinaryResult.secure_url;
-                updateData.imageId = cloudinaryResult.public_id;
+                updateData.imageId = cloudinaryResult.public_id; //SAVING PUBLIC ID TO DELETE THE IMAGE FROM CLOUDINARY
             } else {
                 return res.status(400).json({ message: "cannot Update image, Please try again later" })
             }
@@ -35,7 +35,7 @@ const editTask = async (req, res) => {
 
         const [updatedTask] = await Task.update(updateData, { where: {id:editId} });
        
-        if (updatedTask===0) { //IF IT SUCCESS IT RETURN 1 AND IF NOT RETURN 0
+        if (updatedTask===0) { //IF IT SUCCESS IT RETURN 1 AND IF FAILS RETURN 0
             return res.status(404).json({ message: "Task not found" });
           }
         console.log(updatedTask);

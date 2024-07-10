@@ -77,11 +77,11 @@ const [pvsImage,setPvsImage]=useState("")
              }))
         }
 
-        if(description.length <10 || heading.length >300 ){
+        if(description.length <3 || description.length >100 ){
             count ++
             setInputError((pvs)=> ({
                ...pvs,
-               descriptionError:'length Should be in between 10 and 300 characters'
+               descriptionError:'length Should be in between 3 and 100 characters'
             }))
         }else{
             setInputError((pvs)=> ({
